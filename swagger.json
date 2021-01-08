@@ -3,7 +3,7 @@
   "info": {
     "title": "Integration Monitoring CRUD API",
     "description": "CRUD API for the database of the Integration Monitoring solution.",
-    "version": "v0.1"
+    "version": "v0"
   },
   "host": "intmonitor-dev-func.azurewebsites.net",
   "basePath": "/api",
@@ -42,10 +42,7 @@
           "200": {
             "description": "The specified message objects were created successfully. Returns a list of the newly created messages object IDs.",
             "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/string"
-              }
+              "$ref": "#/definitions/createResponse"
             },
             "x-ms-summary": "Messages created"
           },
@@ -106,7 +103,7 @@
             },
             "x-ms-summary": "Unexpected error"
           },
-          "200": {
+          "204": {
             "description": "The messages with the specified IDs were deleted successfully.",
             "x-ms-summary": "Message deleted"
           }
@@ -322,16 +319,6 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "The specified message objects were updated successfully.. Returns a list of the newly created messages objects.",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/string"
-              }
-            },
-            "x-ms-summary": "Messages updated"
-          },
           "400": {
             "description": "The client request is invalid.",
             "schema": {
@@ -345,6 +332,10 @@
               "$ref": "#/definitions/errorResponse"
             },
             "x-ms-summary": "Unexpected error"
+          },
+          "204": {
+            "description": "The specified message objects were updated successfully.",
+            "x-ms-summary": "Message updated"
           }
         },
         "x-ms-visibility": "important"
@@ -352,6 +343,17 @@
     }
   },
   "definitions": {
+    "createResponse": {
+      "type": "object",
+      "properties": {
+        "ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "errorResponse": {
       "type": "object",
       "properties": {
