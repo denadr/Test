@@ -1,0 +1,470 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Integration Monitoring CRUD API",
+    "description": "CRUD API for the database of the Integration Monitoring solution.",
+    "version": "v0.1"
+  },
+  "host": "intmonitor-dev-func.azurewebsites.net",
+  "basePath": "/api",
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/messages": {
+      "post": {
+        "tags": [
+          "Create"
+        ],
+        "summary": "Creates a list of messages.",
+        "description": "Creates a list of messages.",
+        "operationId": "create",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/sapMessage"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The specified message objects were created successfully. Returns a list of the newly created messages object IDs.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/string"
+              }
+            },
+            "x-ms-summary": "Messages created"
+          },
+          "400": {
+            "description": "The client request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            },
+            "x-ms-summary": "Invalid input"
+          },
+          "500": {
+            "description": "The server encountered an unexpected internal error.",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            },
+            "x-ms-summary": "Unexpected error"
+          }
+        },
+        "x-ms-visibility": "important"
+      },
+      "delete": {
+        "tags": [
+          "Delete"
+        ],
+        "summary": "Deletes a list of messages.",
+        "description": "Deletes a list of messages.",
+        "operationId": "delete",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "description": "IDs of the items to delete, as comma-separated list.",
+            "required": true,
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi",
+            "x-ms-summary": "Message IDs",
+            "x-ms-visibility": "important"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "The client request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            },
+            "x-ms-summary": "Invalid input"
+          },
+          "500": {
+            "description": "The server encountered an unexpected internal error.",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            },
+            "x-ms-summary": "Unexpected error"
+          },
+          "200": {
+            "description": "The messages with the specified IDs were deleted successfully.",
+            "x-ms-summary": "Message deleted"
+          }
+        },
+        "x-ms-visibility": "advanced"
+      },
+      "get": {
+        "tags": [
+          "Read"
+        ],
+        "summary": "Reads a list of messages.",
+        "description": "Reads a list of messages.",
+        "operationId": "read",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "select",
+            "description": "The message object properties to query, as comma-separated list.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi",
+            "x-ms-summary": "Message properties",
+            "x-ms-visibility": "important"
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "description": "The message IDs to filter for, as comma-separated list.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi",
+            "x-ms-summary": "Message IDs",
+            "x-ms-visibility": "important"
+          },
+          {
+            "in": "query",
+            "name": "type",
+            "description": "The message types to filter for, as comma-separated list.",
+            "type": "array",
+            "items": {
+              "default": "purchaseOrder",
+              "enum": [
+                "purchaseOrder",
+                "request"
+              ],
+              "type": "string"
+            },
+            "collectionFormat": "multi",
+            "x-ms-summary": "Message types",
+            "x-ms-visibility": "important"
+          },
+          {
+            "in": "query",
+            "name": "direction",
+            "description": "The message direction to filter for.",
+            "type": "string",
+            "default": "inbound",
+            "enum": [
+              "inbound",
+              "outbound"
+            ],
+            "x-ms-summary": "Message direction",
+            "x-ms-visibility": "important"
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "description": "The message states to filter for, as comma-separated list.",
+            "type": "array",
+            "items": {
+              "default": "pending",
+              "enum": [
+                "pending",
+                "succeeded",
+                "retrying",
+                "failed",
+                "superseded"
+              ],
+              "type": "string"
+            },
+            "collectionFormat": "multi",
+            "x-ms-summary": "Message states",
+            "x-ms-visibility": "important"
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "description": "The earliest message timestamp to filter for.",
+            "type": "string",
+            "format": "date-time",
+            "x-ms-summary": "Earliest timestamp",
+            "x-ms-visibility": "important"
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "description": "The latest message timestamp to filter for.",
+            "type": "string",
+            "format": "date-time",
+            "x-ms-summary": "Latest timestamp",
+            "x-ms-visibility": "important"
+          },
+          {
+            "in": "query",
+            "name": "sapId",
+            "description": "The message SAP IDs to filter for, as comma-separated list.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi",
+            "x-ms-summary": "Message SAP IDs",
+            "x-ms-visibility": "important"
+          },
+          {
+            "in": "query",
+            "name": "sapStatus",
+            "description": "The message SAP states to filter for, as comma-separated list.",
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "collectionFormat": "multi",
+            "x-ms-summary": "Message SAP states",
+            "x-ms-visibility": "important"
+          },
+          {
+            "in": "query",
+            "name": "ignored",
+            "description": "Filter for message that are ignored or not.",
+            "type": "boolean",
+            "x-ms-summary": "Issue ignored",
+            "x-ms-visibility": "important"
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "description": "Offset value to use for pagination. Defaults to 0.",
+            "type": "integer",
+            "format": "int32",
+            "x-ms-summary": "Pagination offset",
+            "x-ms-visibility": "important"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "description": "Limit value to use for pagination.",
+            "type": "integer",
+            "format": "int32",
+            "x-ms-summary": "Pagination limit",
+            "x-ms-visibility": "important"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Query messages. Returns a list of messages objects.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/sapMessage"
+              }
+            },
+            "x-ms-summary": "Query messages"
+          },
+          "400": {
+            "description": "The client request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            },
+            "x-ms-summary": "Invalid input"
+          },
+          "500": {
+            "description": "The server encountered an unexpected internal error.",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            },
+            "x-ms-summary": "Unexpected error"
+          }
+        },
+        "x-ms-visibility": "important"
+      },
+      "patch": {
+        "tags": [
+          "Update"
+        ],
+        "summary": "Updates a list of messages.",
+        "description": "Updates a list of messages.",
+        "operationId": "update",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/sapMessage"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The specified message objects were updated successfully.. Returns a list of the newly created messages objects.",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/string"
+              }
+            },
+            "x-ms-summary": "Messages updated"
+          },
+          "400": {
+            "description": "The client request is invalid.",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            },
+            "x-ms-summary": "Invalid input"
+          },
+          "500": {
+            "description": "The server encountered an unexpected internal error.",
+            "schema": {
+              "$ref": "#/definitions/errorResponse"
+            },
+            "x-ms-summary": "Unexpected error"
+          }
+        },
+        "x-ms-visibility": "important"
+      }
+    }
+  },
+  "definitions": {
+    "errorResponse": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "type": "string"
+        },
+        "error": {
+          "$ref": "#/definitions/object"
+        }
+      }
+    },
+    "event": {
+      "type": "object",
+      "properties": {
+        "event": {
+          "default": "received",
+          "enum": [
+            "received",
+            "error"
+          ],
+          "type": "string"
+        },
+        "logMessage": {
+          "type": "string"
+        },
+        "time": {
+          "format": "date-time",
+          "type": "string"
+        }
+      }
+    },
+    "object": {
+      "type": "object"
+    },
+    "sapMessage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "default": "purchaseOrder",
+          "enum": [
+            "purchaseOrder",
+            "request"
+          ],
+          "type": "string"
+        },
+        "direction": {
+          "default": "inbound",
+          "enum": [
+            "inbound",
+            "outbound"
+          ],
+          "type": "string"
+        },
+        "status": {
+          "default": "pending",
+          "enum": [
+            "pending",
+            "succeeded",
+            "retrying",
+            "failed",
+            "superseded"
+          ],
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "time": {
+          "format": "date-time",
+          "type": "string"
+        },
+        "sapId": {
+          "type": "string"
+        },
+        "sapStatus": {
+          "type": "string"
+        },
+        "issueIgnored": {
+          "type": "boolean"
+        },
+        "payload": {
+          "type": "object"
+        },
+        "payloadXml": {
+          "type": "string"
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/event"
+          }
+        },
+        "retryJobs": {
+          "type": "array",
+          "items": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "retryUrl": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "authKey": {
+      "type": "apiKey",
+      "name": "x-functions-key",
+      "in": "header"
+    }
+  }
+}
